@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+</head>
+<body>
+    <div class="header">
+        <h1>Главная</h1>
+        <div>
+            <a href="{{ url_for('register') }}">Регистрация</a>
+            <a href="{{ url_for('login') }}">Вход</a>
+        </div>
+    </div>
+
+    <h2>Все посты:</h2>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <h3>{{ post[1] }}</h3>
+                <p>{{ post[2] }}</p>
+                <p><em>Автор: {{ post[3] if post[3] else "Гость" }}</em></p>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="users-section">
+        <h3> Все пользователи:</h3>
+        {% if users %}
+            <ul class="users-list">
+            {% for user in users %}
+                <li>
+                    <a href="{{ url_for('user_page', user_id=user[0]) }}">
+                        {{ user[1] }}
+                    </a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Пользователей пока нет. <a href="{{ url_for('register') }}">Зарегистрируйтесь первым!</a></p>
+        {% endif %}
+    </div>
+</body>
+</html>
