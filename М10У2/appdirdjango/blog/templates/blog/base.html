@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Блог на Django{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1><a href="{% url 'home' %}">Мой блог</a></h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">Главная</a></li>
+                <li><a href="{% url 'post_list' %}">Все посты</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'post_create' %}">Новый пост</a></li>
+                    <li>Привет, {{ user.username }}!</li>
+                {% else %}
+                    <li><a href="#">Войти</a> (пока не работает)</li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <aside>
+        <h3>Категории</h3>
+        <ul>
+            {% for category in categories %}
+                <li><a href="{% url 'category_posts' category.id %}">{{ category.name }}</a></li>
+            {% empty %}
+                <li>Нет категорий</li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; Блог на Django</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Все посты{% endblock %}
+
+{% block content %}
+    <h2>Все посты</h2>
+    {% if posts %}
+        <ul>
+        {% for post in posts %}
+            <li>
+                <a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
+                - {{ post.author.username }} ({{ post.created_at|date:"d.m.Y" }})
+                {% if post.category %} | Категория: {{ post.category.name }}{% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+
+        <!-- Пагинация -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">&laquo; первая</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">предыдущая</a>
+                {% endif %}
+
+                <span class="current">
+                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">следующая</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">последняя &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    {% else %}
+        <p>Пока нет постов.</p>
+    {% endif %}
+{% endblock %}

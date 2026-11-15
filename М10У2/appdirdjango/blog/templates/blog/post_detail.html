@@ -1,0 +1,37 @@
+{% extends "blog/base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <p>Автор: {{ post.author.username }} | Категория: {{ post.category.name }} | Просмотров: {{ post.views_count }}</p>
+    <p>Опубликовано: {{ post.created_at|date:"d.m.Y H:i" }}</p>
+
+    {% if user == post.author or user.is_superuser %}
+        <p>
+            <a href="{% url 'post_update' post.id %}">Редактировать</a>
+            <a href="{% url 'post_delete' post.id %}">Удалить</a>
+        </p>
+    {% endif %}
+
+    <hr>
+    <div>
+        {{ post.content|linebreaks }}
+    </div>
+    <hr>
+
+    <h3>Комментарии ({{ comments.count }})</h3>
+    {% if comments %}
+        {% for comment in comments %}
+            <div style="border: 1px solid #ccc; margin-bottom: 10px; padding: 10px;">
+                <strong>{{ comment.author.username }}</strong> 
+                <small>({{ comment.time_since_created }} назад)</small>
+                <p>{{ comment.text|linebreaks }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Пока нет комментариев. Будьте первым!</p>
+    {% endif %}
+
+    <p><a href="{% url 'home' %}">← На главную</a></p>
+{% endblock %}
